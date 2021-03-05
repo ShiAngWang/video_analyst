@@ -6,12 +6,22 @@ os.environ['MPLBACKEND'] = "TKAg"
 
 
 def readme():
+    """Return the content of README.md.
+
+    Returns:
+        str:content of README.md
+    """
     with open('README.md', encoding='utf-8') as f:
         content = f.read()
     return content
 
 
 def get_version():
+    """Return the the package version documented in videoanalyst/__init__.py.
+
+    Returns:
+        str:version number
+    """
     init_py_path = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                 "videoanalyst", "__init__.py")
     init_py = open(init_py_path, "r").readlines()
@@ -35,7 +45,7 @@ def parse_requirements(fname='requirements.txt', with_version=True):
     import re
     import sys
     from os.path import exists
-    require_fpath = fname
+    require_fpath = fname  # requirements file 路径
 
     def parse_line(line):
         """Parse information from a line in a requirements text file."""
@@ -96,23 +106,25 @@ def parse_requirements(fname='requirements.txt', with_version=True):
 
 
 setuptools.setup(
-    name="videoanalyst",
-    version=get_version(),
-    author="Megvii.Video",
-    author_email="lizuoxin@megvii.com",
+    name="videoanalyst",  # 包名称
+    version=get_version(),  # 包版本
+    author="Megvii.Video",  # 程序作者
+    author_email="lizuoxin@megvii.com",  # 程序作者的邮箱地址
+    # 程序的简单描述
     description=
-    "A series of basic algorithms that are useful for video understanding, including Single Object Tracking (SOT), Video Object Segmentation (VOS) and so on.",
-    long_description=readme(),
-    long_description_content_type="text/markdown",
-    url="https://github.com/MegviiDetection/video_analyst",
-    packages=setuptools.find_packages(),
+    "A series of basic algorithms that are useful for videoenderstanding, including Single Object Tracking (SOT), Video Object Segmentation (VOS) and so on.",
+    long_description=readme(),  # 程序的详细描述
+    long_description_content_type="text/markdown",  # 长描述的标记类型，这里是 Markdown
+    url="https://github.com/MegviiDetection/video_analyst",  # 程序的官网地址
+    packages=setuptools.find_packages(
+    ),  # 需要安装的包，通过 setuptools.find_packages 找到当前目录下有哪些包
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Operating System :: OS Independent",
-    ],
-    python_requires=">=3.5",
-    install_requires=parse_requirements("requirements.txt"),
+    ],  # 程序所属分类列表
+    python_requires=">=3.5",  # 本包支持的 Python 版本
+    install_requires=parse_requirements("requirements.txt"),  # 安装时需要安装的依赖包
 )

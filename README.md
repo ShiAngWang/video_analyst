@@ -47,14 +47,14 @@ Please refer to [SOT_TEST.md](docs/TUTORIALS/SOT_TEST.md) for detail.
 
 Please refer to [SOT_TRAINING.md](docs/TUTORIALS/SOT_TRAINING.md) for detail.
 
-## Repository structure (in progress)
+## Repository structure (in progress) 项目整体架构
 
 ```File Tree
 project_root/
-├── experiments  # experiment configurations, in yaml format
+├── experiments  # experiment configurations, in yaml format (实验配置，网络的结构配置、数据集配置等等，整个项目都会根据配置文件运行，配置即系统构建，in yaml format)
 ├── main
-│   ├── train.py  # trainng entry point
-│   └── test.py  # test entry point
+│   ├── train.py  # trainng entry point（训练入口，已经集成化了，当模块构建完成后，可直接运行，python3 main/train.py or test.py -cfg configfile.yaml）
+│   └── test.py  # test entry point（测试入口）
 ├── video_analyst
 │   ├── data  # modules related to data
 │   │   ├── dataset  # data fetcher of each individual dataset

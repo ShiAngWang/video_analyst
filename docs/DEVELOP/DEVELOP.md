@@ -6,7 +6,7 @@ It is a common design that is adopted by several mainsteam deep learning reposit
 
 The main idea is to build a dictionary whose _keys_ are module names and whose _values_ are the module class objects, and then construct the whole pipeline (e.g. tracker/segmenter/trainer of them/etc.) by retrieving module class objects and instantiating them with predefiend configurations.
 
-An example for demonstrating the usage the registry is given as below:
+An example for demonstrating the usage the registry is given as below:（在xxx_base.py里构建字典，在XXX_impl/YYY.py里实现模块类）
 
 ```Python
 # In XXX_base.py

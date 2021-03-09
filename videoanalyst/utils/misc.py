@@ -28,17 +28,24 @@ class Registry(dict):
 
     Access of module is just like using a dictionary, eg:
         f = some_registry["foo_module"]
+
+    注册处类，继承于 dict 类，提供一个 register 函数用于将 模块名称：模块类对象 这样的键值对添加（注册）到注册处实例中。
+    后期可以通过注册处实例检索模块类 （f = some_registry["foo_module"]），并使用预定义的配置文件实例化模块类对象来构建整个 pipeline（例如，
+    构建 pipeline 的跟踪器/分割器/训练器等）
+
+    关于注册机制的介绍可以查阅 DEVELOP.md
     """
     def __init__(self, *args, **kwargs):
         self.name = 'Registry'
         if len(args) > 0 and isinstance(args[0], str):
-            name, *args = args
-            self.name = name
+            name, *args = args  # 数据拆包
+            self.name = name  # Registry 字典命名
         super(Registry, self).__init__(*args, **kwargs)
 
-    def register(self, module):
-        name = module.__name__
-        _register_generic(self, name, module)
+    def register(self, module):  # 将 模块名称：模块类对象 这样的键值对添加（注册）到 Registry 字典实例中
+        name = module.__name__  # 键 模块名称
+        _register_generic(self, name,
+                          module)  # 添加 模块名称：模块类对象 键值对到 Registry 字典实例
         #logger.debug('%s: %s registered' % (self.name, name))
         return module
 

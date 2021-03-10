@@ -46,11 +46,12 @@ def build(task: str, cfg: CfgNode, basemodel=None):
     if basemodel:
         module = modules[name](basemodel)
     else:
-        module = modules[name]()  # 根据 backbone 名称检索对应的 backbone module 并实例化
+        module = modules[name](
+        )  # 根据 backbone 名称检索对应的 backbone module （如 AlexNet）并实例化
 
-    hps = module.get_hps()
-    hps = merge_cfg_into_hps(cfg[name], hps)
-    module.set_hps(hps)
+    hps = module.get_hps()  # 获取 backbone 实例的超参数字典
+    hps = merge_cfg_into_hps(cfg[name], hps)  # 将配置信息中的该 backbone 类的超参数数据合并入字典中
+    module.set_hps(hps)  # 重新设置 backbone 实例的超参数
     module.update_params()
     return module
 

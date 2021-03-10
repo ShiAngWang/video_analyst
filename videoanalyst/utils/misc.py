@@ -66,6 +66,19 @@ def load_cfg(path: str):
 
 
 def merge_cfg_into_hps(cfg: CN, hps: Dict):
+    r"""
+    将配置信息中的超参数数据合并入传入的超参数字典 hps中，并返回 hps
+
+    Args:
+        cfg: CN
+            配置信息
+        hps: dict
+            超参数字典
+
+    Returns:
+        hps: dict
+            合并数据后的超参数字典
+    """
     for hp_name in hps:
         if hp_name in cfg:
             new_value = cfg[hp_name]

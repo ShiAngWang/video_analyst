@@ -11,6 +11,10 @@ from .backbone_base import TASK_BACKBONES
 
 def build(task: str, cfg: CfgNode, basemodel=None):
     r"""
+    backbone build 函数
+
+    根据传入的 task(track|vos) 及配置信息构建并返回 backbone 模块
+
     Builder function.
 
     Arguments
@@ -29,19 +33,20 @@ def build(task: str, cfg: CfgNode, basemodel=None):
         module built by builder
     """
     if task in TASK_BACKBONES:
-        modules = TASK_BACKBONES[task]
+        modules = TASK_BACKBONES[
+            task]  # 检索对应的 backbones(TRACK_BACKBONES|VOS_BACKBONES)
     else:
         logger.error("no backbone for task {}".format(task))
-        exit(-1)
+        exit(-1)  # 检索失败
 
-    name = cfg.name
+    name = cfg.name  # 配置信息中的目标 backbone 名称
     assert name in modules, "backbone {} not registered for {}!".format(
         name, task)
 
     if basemodel:
         module = modules[name](basemodel)
     else:
-        module = modules[name]()
+        module = modules[name]()  # 根据 backbone 名称检索对应的 backbone module 并实例化
 
     hps = module.get_hps()
     hps = merge_cfg_into_hps(cfg[name], hps)

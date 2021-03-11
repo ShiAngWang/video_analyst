@@ -11,7 +11,8 @@ from videoanalyst.model.module_base import ModuleBase
 
 @VOS_BACKBONES.register
 @TRACK_BACKBONES.register
-class TinyConv(ModuleBase):
+class TinyConv(ModuleBase
+               ):  # 将 TinyConv 先后注册到 TRACK_BACKBONES 和 VOS_BACKBONES 中
     r"""
     TinyNet
     Customized, extremely pruned ConvNet

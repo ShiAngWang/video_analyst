@@ -18,7 +18,7 @@ from videoanalyst.model.module_base import ModuleBase
 
 
 @VOS_BACKBONES.register
-@TRACK_BACKBONES.register
+@TRACK_BACKBONES.register  # 将 Inception3 先后注册到 TRACK_BACKBONES 和 VOS_BACKBONES 中
 class Inception3(ModuleBase):
     r"""
     GoogLeNet

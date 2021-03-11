@@ -11,7 +11,8 @@ from videoanalyst.utils.misc import merge_cfg_into_hps
 
 def build(task: str, cfg: CfgNode):
     if task in TASK_LOSSES:
-        MODULES = TASK_LOSSES[task]
+        MODULES = TASK_LOSSES[
+            task]  # 检索 task 对应的 Loss module(TRACK_LOSSES|VOS_LOSSES)
     else:
         logger.error("no loss for task {}".format(task))
         exit(-1)

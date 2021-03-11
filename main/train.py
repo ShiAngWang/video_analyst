@@ -87,11 +87,13 @@ if __name__ == '__main__':
         devs = ["cuda:{}".format(i) for i in range(world_size)]
     else:
         devs = ["cpu"]
-    # build model
+    # build.model(nn.Module) backbone, head, losses return -> task_model
     model = model_builder.build(task, task_cfg.model)
     model.set_device(devs[0])
+
     # load data
     with Timer(name="Dataloader building", verbose=True):
+        # datapipeline: sampler(pair), filter, target(input and label)
         dataloader = dataloader_builder.build(task, task_cfg.data)
     # build optimizer
     optimizer = optim_builder.build(task, task_cfg.optim, model)
@@ -99,7 +101,7 @@ if __name__ == '__main__':
     trainer = engine_builder.build(task, task_cfg.trainer, "trainer", optimizer,
                                    dataloader)
     trainer.set_device(devs)
-    trainer.resume(parsed_args.resume)
+    trainer.resume(parsed_args.resume)  # 断点续训
     # trainer.init_train()
     logger.info("Start training")
     while not trainer.is_completed():

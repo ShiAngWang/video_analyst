@@ -1,12 +1,4 @@
 # -*- coding: utf-8 -*
-r"""
-此模块 videoanalyst.model.builder 负责 model 的构建及
-
-此模块对外提供两个接口：
-build 负责根据传入的任务类型及配置信息检索相应的 backbone, loss, head 组装成 model 并返回
-get_config
-"""
-
 from typing import Dict, List
 
 from loguru import logger

@@ -10,7 +10,7 @@ from ...module_base import ModuleBase
 from ..backbone_base import TRACK_BACKBONES
 
 
-@TRACK_BACKBONES.register
+@TRACK_BACKBONES.register  # 将 ShuffleNetV2_x1_0 注册到 TRACK_BACKBONES 中
 class ShuffleNetV2_x1_0(ModuleBase):
     default_hyper_params = dict(
         pretrain_model_path="",
@@ -39,7 +39,7 @@ class ShuffleNetV2_x1_0(ModuleBase):
         return x
 
 
-@TRACK_BACKBONES.register
+@TRACK_BACKBONES.register  # 将 ShuffleNetV2_x0_5 注册到 TRACK_BACKBONES 中
 class ShuffleNetV2_x0_5(ModuleBase):
     default_hyper_params = dict(
         pretrain_model_path="",

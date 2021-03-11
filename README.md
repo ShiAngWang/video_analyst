@@ -17,7 +17,7 @@
   系统配置架构示意图如下：
   
   <br/>
-  ![png1](./1.png)
+  ![png1](1.png)
   <br/>
   <br/>
   
@@ -73,11 +73,11 @@
   模块构建流程如图。
   
   <br/>
-  ![png2](./2.png)
+  ![png2](2.png)
   <br/>
   <br/>
   
-  综上可见，由于着重于多任务框架的设计和实现，遵守开闭原则 (Open–closed principle)，因此 video_analyst 具有非常好的多任务扩展属性，可通过添加自定义模块以实现新的工作。(自定义模块
+  由于着重于多任务框架的设计和实现，遵守开闭原则 (Open–closed principle)，因此 video_analyst 具有非常好的多任务扩展属性，可通过添加自定义模块以实现新的工作。(自定义模块
   的说明参见 [docs/TEMPLATES/README.md](./docs/TEMPLATES/README.md))
   
 

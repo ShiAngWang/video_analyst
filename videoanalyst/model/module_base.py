@@ -50,10 +50,19 @@ class ModuleBase(nn.Module):
             self._hyper_params[key] = hps[key]
 
     def update_params(self):
-        model_file = self._hyper_params.get("pretrain_model_path", "")
+        r"""
+           定义了 model 用配置文件提供的超参数更新超参数的行为
+
+           Returns:
+
+        """
+
+        model_file = self._hyper_params.get("pretrain_model_path",
+                                            "")  # 获取预训练模型文件位置
         if model_file != "":
-            state_dict = torch.load(model_file,
-                                    map_location=torch.device("cpu"))
+            state_dict = torch.load(
+                model_file,
+                map_location=torch.device("cpu"))  # 加载 model tensors
             if "model_state_dict" in state_dict:
                 state_dict = state_dict["model_state_dict"]
             self.load_model_param(state_dict)

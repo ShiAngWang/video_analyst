@@ -3,8 +3,9 @@ from typing import Dict, List
 
 from yacs.config import CfgNode
 
-from .template_module_base import TASK_TEMPLATE_MODULES, TemplateModuleBase
 from videoanalyst.utils import merge_cfg_into_hps
+
+from .template_module_base import TASK_TEMPLATE_MODULES, TemplateModuleBase
 
 
 def build(task: str, cfg: CfgNode) -> TemplateModuleBase:
@@ -17,7 +18,7 @@ def build(task: str, cfg: CfgNode) -> TemplateModuleBase:
         node name: template_module
     """
     assert task in TASK_TEMPLATE_MODULES, "invalid task name"
-    MODULES = TASK_TEMPLATE_MODULES[task]
+    MODULES = TASK_TEMPLATE_MODULES[task]  # # 检索 task 对应的 module
 
     name = cfg.name
     module = MODULES[name]()

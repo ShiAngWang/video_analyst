@@ -1,3 +1,15 @@
+注释参考文档：
+
+[siamfcpp代码讲解 - bilibili](https://www.bilibili.com/video/BV1Hp4y1S74D)
+
+[漫谈视频目标跟踪与分割 - 旷视科技的文章 - 知乎](https://zhuanlan.zhihu.com/p/114743420)
+
+[video_analyst项目搭建与siamfc++小结 - CSDN](https://blog.csdn.net/PAN_Andy/article/details/105345598)
+
+
+运行环境建议 torch=1.7.1,torchvision=0.8.2,经测试在 torch 版本为 1.8.0 时运行报错
+
+
 # Video Analyst
 
 [![Build Status](https://travis-ci.org/MegviiDetection/video_analyst.svg?branch=master)](https://travis-ci.org/MegviiDetection/video_analyst)

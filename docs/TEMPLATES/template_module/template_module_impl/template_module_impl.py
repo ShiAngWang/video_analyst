@@ -1,10 +1,4 @@
 # -*- coding: utf-8 -*-
-from loguru import logger
-from typing import Dict, List, Tuple
-
-import cv2
-import numpy as np
-from yacs.config import CfgNode
 
 from ..template_module_base import (TRACK_TEMPLATE_MODULES,
                                     VOS_TEMPLATE_MODULES, TemplateModuleBase)
@@ -19,10 +13,16 @@ class TemplateModuleImplementation(TemplateModuleBase):
     Hyper-parameters
     ----------------
     """
-    default_hyper_params = dict(template_module_hp="", )
+    default_hyper_params = dict(template_module_hp="",
+                                )  # 这部分定义模块的hyper-parameters(name/type)
 
     def __init__(self, ) -> None:
         super().__init__()
 
     def update_params(self) -> None:
-        pass
+        r"""
+        定义了用配置文件提供的超参数更新超参数的行为
+
+        Returns:
+
+        """

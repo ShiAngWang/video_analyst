@@ -1,6 +1,6 @@
 # 标注说明
 
-本次标注任务针对旷世研究院公布的深度学习训练工程 VideoAnalyst 的单目标跟踪（SOT）部分。该工程基于 pytorch，以算法 SiamFC++ 和 SAT 为项目实例，构建了一套易于任务扩展的深度学习训练/测评框架。
+本次标注任务针对旷世研究院公布的深度学习训练工程 VideoAnalyst 的单目标跟踪（SOT）部分。VideoAnalyst 基于 pytorch，以算法 SiamFC++ 和 SAT 为项目实例，构建了一套易于任务扩展的深度学习训练/测评框架。
 
 本次标注涵盖工程框架结构与 SiamFC++ 算法重点细节两方面。
 
@@ -36,7 +36,7 @@
   2. 如何对一个训练或测试流程进行合理的模块化配置。
 
 为解决这两个问题，该工程采用 config 内容与代码模块一一对应的方式，配置即系统构建，整个工程在一套 config 配置树的规划下进行配置与开发；在各个模块内部，
-采用注册器的形式将子模块进行注册以便于检索(对配置树及注册机制的说明参见 [docs/DEVELOP/DEVELOP.md](./docs/DEVELOP/DEVELOP.md))。在此基础上，形成
+采用注册器的形式将子模块进行注册以便于检索(对配置树及注册机制的说明参见 [docs/DEVELOP/DEVELOP.md](./docs/DEVELOP/DEVELOP.md)及相关代码的注释)。在此基础上，形成
 了如下的项目整体架构。
 
 ```File Tree
@@ -93,15 +93,21 @@ project_root/
 
 ## SiamFC++ 算法重点细节
 
+
+
 标注参考文档：
+
+[SiamFC++ 论文原文](https://arxiv.org/pdf/1911.06188.pdf)
 
 [siamfcpp代码讲解 - bilibili](https://www.bilibili.com/video/BV1Hp4y1S74D)
 
 [漫谈视频目标跟踪与分割 - 旷视科技的文章 - 知乎](https://zhuanlan.zhihu.com/p/114743420)
 
+[video_analyst项目搭建与siamfc++小结 - CSDN](https://blog.csdn.net/PAN_Andy/article/details/105345598)
+
 [单目标追踪论文阅读系列（二）——《SiamFC++（AAAI 2020）》 - 零维的文章 - 知乎](https://zhuanlan.zhihu.com/p/93888180)
 
-[video_analyst项目搭建与siamfc++小结 - CSDN](https://blog.csdn.net/PAN_Andy/article/details/105345598)
+[SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines 论文学习](https://blog.csdn.net/PAN_Andy/article/details/104584807/)
 
 
 

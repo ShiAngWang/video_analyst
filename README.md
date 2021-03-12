@@ -2,90 +2,96 @@
 
 本次标注任务针对旷世研究院公布的深度学习训练工程 VideoAnalyst 的单目标跟踪（SOT）部分。该工程基于 pytorch，以算法 SiamFC++ 和 SAT 为项目实例，构建了一套易于任务扩展的深度学习训练/测评框架。
 
-本次标注涵盖工程框架结构与 SiamFC++ 算法重点细节两方面：
+本次标注涵盖工程框架结构与 SiamFC++ 算法重点细节两方面。
 
-* 工程框架架构
+## 工程框架架构
   
-  该系统整体由 5 个模块构成：
-      1. dataloader 模块提供训练数据；
-      2. model 模块构建模型结构、初始化和损失函数等，构成模型的整体架构；
-      3. optimizer 模块专注于模型（model）的训练细节，比如学习率调节 (lr schedule)、优化器参数 (optim method)、
-         梯度调整 (grad modifier) 等；
-      4. engine 模块中的 trainer 子模块控制一个epoch的训练流程，tester 子模块控制一个测试集的测试流程；
-      5. pipeline 模块构建特定任务的处理流程，可以独立运行测试，或提供对外API接口。
-  
-  系统配置架构示意图如下：
-  
-  <br/>
-  <div align="center">
-    <img src="IMG/1.png" />
-    <p>系统配置架构示意图</p>
-  </div>
-  <br/>
-  <br/>
-  
-  实现该系统架构的核心问题是：
-  
-    1) 如何在这 5 个模块中实现不同的任务；
-       
-    2) 如何对一个训练或测试流程进行合理的模块化配置。
-    
-  为解决这两个问题，该工程采用 config 内容与代码模块一一对应的方式，配置即系统构建，整个工程在一套 config 配置树的规划下进行配置与开发；在各个模块内部，
-  采用注册器的形式将子模块进行注册以便于检索(对配置树及注册机制的说明参见 [docs/DEVELOP/DEVELOP.md](./docs/DEVELOP/DEVELOP.md))。在此基础上，形成
-  了如下的项目整体架构。
-  
-  ```File Tree
-    project_root/
-    ├── experiments  # experiment configurations, in yaml format (实验配置，网络的结构配置、数据集配置等等，
-                                                                  整个项目都会根据配置文件运行)
-    ├── main
-    │   ├── train.py  # trainng entry point（训练入口，已经集成化了，当模块构建完成后，
-                                             可直接运行 python3 main/train.py or test.py -cfg configfile.yaml）
-    │   └── test.py  # test entry point
-    ├── video_analyst
-    │   ├── data  # modules related to data
-    │   │   ├── dataset  # data fetcher of each individual dataset
-    │   │   ├── sampler  # data sampler, including inner-dataset and intra-dataset sampling procedure
-    │   │   ├── dataloader.py  # data loading procedure
-    │   │   └── transformer  # data augmentation
-    │   ├── engine  # procedure controller, including traiing control / hp&model loading
-    │   │   ├── monitor  # monitor for tasks during training, including visualization / logging / benchmarking
-    │   │   ├── trainer.py  # train a epoch
-    │   │   ├── tester.py  # test a model on a benchmark
-    │   ├── model # model builder
-    │   │   ├── backbone  # backbone network builder
-    │   │   ├── common_opr  # shared operator (e.g. cross-correlation)
-    │   │   ├── task_model  # holistic model builder
-    │   │   ├── task_head  # head network builder
-    │   │   └── loss  # loss builder
-    │   ├── pipeline  # pipeline builder (tracking / vos)
-    │   │   ├── segmenter  # segmenter builder for vos
-    │   │   ├── tracker  # tracker builder for tracking
-    │   │   └── utils  # pipeline utils
-    │   ├── config  # configuration manager
-    │   ├── evaluation  # benchmark
-    │   ├── optim  # optimization-related module (learning rate, gradient clipping, etc.)
-    │   │   ├── optimizer # optimizer
-    │   │   ├── scheduler # learning rate scheduler
-    │   │   └── grad_modifier # gradient-related operation (parameter freezing)
-    │   └── utils  # useful tools
-    └── README.md
-  ```
-  
-  该工程按照配置即系统构建的设计原则，在配置文件中按照代码模块的实际分布进行相关参数的配置，使其集中化、逻辑化，训练和测试仅需要运行 python3 main/train.py or test.py -cfg configfile.yaml 即可，具体的
-  模块构建流程如图。
-  
-  <br/>
-  <div align="center">
-    <img src="IMG/2.png" />
-    <p>模块构建流程图</p>
-  </div>
-  <br/>
-  <br/>
-  
-  由于着重于多任务框架的设计和实现，遵守开闭原则 (Open–closed principle)，因此 video_analyst 具有非常好的多任务扩展属性，可通过添加自定义模块以实现新的工作。(自定义模块
-  的说明参见 [docs/TEMPLATES/README.md](./docs/TEMPLATES/README.md))
-  
+该系统整体由 5 个模块构成：
+
+  1. dataloader 模块提供训练数据；
+     
+  2. model 模块构建模型结构、初始化和损失函数等，构成模型的整体架构；
+     
+  3. optimizer 模块专注于模型（model）的训练细节，比如学习率调节 (lr schedule)、优化器参数 (optim method)、
+     梯度调整 (grad modifier) 等；
+     
+  4. engine 模块中的 trainer 子模块控制一个epoch的训练流程，tester 子模块控制一个测试集的测试流程；
+     
+  5. pipeline 模块构建特定任务的处理流程，可以独立运行测试，或提供对外API接口。
+
+系统配置架构示意图如下：
+
+<br/>
+<div align="center">
+<img src="IMG/1.png" />
+<p>系统配置架构示意图</p>
+</div>
+<br/>
+<br/>
+
+实现该系统架构的核心问题是：
+
+  1. 如何在这 5 个模块中实现不同的任务；
+   
+  2. 如何对一个训练或测试流程进行合理的模块化配置。
+
+为解决这两个问题，该工程采用 config 内容与代码模块一一对应的方式，配置即系统构建，整个工程在一套 config 配置树的规划下进行配置与开发；在各个模块内部，
+采用注册器的形式将子模块进行注册以便于检索(对配置树及注册机制的说明参见 [docs/DEVELOP/DEVELOP.md](./docs/DEVELOP/DEVELOP.md))。在此基础上，形成
+了如下的项目整体架构。
+
+```File Tree
+project_root/
+├── experiments  # experiment configurations, in yaml format (实验配置，网络的结构配置、数据集配置等等，
+                                                              整个项目都会根据配置文件运行)
+├── main
+│   ├── train.py  # trainng entry point（训练入口，已经集成化了，当模块构建完成后，
+                                         可直接运行 python3 main/train.py or test.py -cfg configfile.yaml）
+│   └── test.py  # test entry point
+├── video_analyst
+│   ├── data  # modules related to data
+│   │   ├── dataset  # data fetcher of each individual dataset
+│   │   ├── sampler  # data sampler, including inner-dataset and intra-dataset sampling procedure
+│   │   ├── dataloader.py  # data loading procedure
+│   │   └── transformer  # data augmentation
+│   ├── engine  # procedure controller, including traiing control / hp&model loading
+│   │   ├── monitor  # monitor for tasks during training, including visualization / logging / benchmarking
+│   │   ├── trainer.py  # train a epoch
+│   │   ├── tester.py  # test a model on a benchmark
+│   ├── model # model builder
+│   │   ├── backbone  # backbone network builder
+│   │   ├── common_opr  # shared operator (e.g. cross-correlation)
+│   │   ├── task_model  # holistic model builder
+│   │   ├── task_head  # head network builder
+│   │   └── loss  # loss builder
+│   ├── pipeline  # pipeline builder (tracking / vos)
+│   │   ├── segmenter  # segmenter builder for vos
+│   │   ├── tracker  # tracker builder for tracking
+│   │   └── utils  # pipeline utils
+│   ├── config  # configuration manager
+│   ├── evaluation  # benchmark
+│   ├── optim  # optimization-related module (learning rate, gradient clipping, etc.)
+│   │   ├── optimizer # optimizer
+│   │   ├── scheduler # learning rate scheduler
+│   │   └── grad_modifier # gradient-related operation (parameter freezing)
+│   └── utils  # useful tools
+└── README.md
+```
+
+该工程按照配置即系统构建的设计原则，在配置文件中按照代码模块的实际分布进行相关参数的配置，使其集中化、逻辑化，训练和测试仅需要运行 python3 main/train.py or test.py -cfg configfile.yaml 即可，具体的
+模块构建流程如图。
+
+<br/>
+<div align="center">
+<img src="IMG/2.png" />
+<p>模块构建流程图</p>
+</div>
+<br/>
+<br/>
+
+由于着重于多任务框架的设计和实现，遵守开闭原则 (Open–closed principle)，因此 video_analyst 具有非常好的多任务扩展属性，可通过添加自定义模块以实现新的工作。(自定义模块
+的说明参见 [docs/TEMPLATES/README.md](./docs/TEMPLATES/README.md))
+
+## SiamFC++ 算法重点细节
 
 标注参考文档：
 

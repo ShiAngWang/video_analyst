@@ -2,7 +2,7 @@
 
 本次标注任务针对旷世研究院公布的深度学习训练工程 VideoAnalyst 的单目标跟踪（SOT）部分。VideoAnalyst 基于 pytorch，以算法 SiamFC++ 和 SAT 为项目实例，构建了一套易于任务扩展的深度学习训练/测评框架。
 
-本次标注涵盖工程框架结构与 SiamFC++ 算法重点细节两方面。
+本次标注涵盖工程框架结构与 SiamFC++ 算法介绍两方面。
 
 ## 工程框架架构
   
@@ -91,7 +91,19 @@ project_root/
 由于着重于多任务框架的设计和实现，遵守开闭原则 (Open–closed principle)，因此 video_analyst 具有非常好的多任务扩展属性，可通过添加自定义模块以实现新的工作。(自定义模块
 的说明参见 [docs/TEMPLATES/README.md](./docs/TEMPLATES/README.md))
 
-## SiamFC++ 算法重点细节
+## SiamFC++ 算法介绍
+首先对 SiamFC（Fully-Convolutional Siamese Networks for Object Tracking）进行简要介绍，SiamFC 的网络结构如下图。
+<br/>
+<div align="center">
+<img src="IMG/3.jpg" />
+<p>SiamFC 网络结构</p>
+</div>
+<br/>
+<br/>
+图中的 φ 为CNN编码器，上下两个分支使用的CNN不仅结构相同，参数也是完全共享的。
+z 和 x 分别是要跟踪的目标模版图像（尺寸为 127x127）和新的一帧中的搜索范围 search region（尺寸为 255x255）。二者经过同样的编码器后得到各自的特征图（feature map），对二者进行互相关运算后则会同样得到一个响应图（heatmap），
+其每一个像素的值对应了 x 中与 z 等大的一个对应区域出现跟踪目标的概率。
+
 
 
 

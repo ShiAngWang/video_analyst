@@ -1,4 +1,4 @@
-#标注说明
+# 标注说明
 
 本次标注任务针对旷世研究院公布的深度学习训练工程 VideoAnalyst 的单目标跟踪（SOT）部分。该工程基于 pytorch，以算法 SiamFC++ 和 SAT 为项目实例，构建了一套易于任务扩展的深度学习训练/测评框架。
 
@@ -17,7 +17,10 @@
   系统配置架构示意图如下：
   
   <br/>
-  ![png1](1.png)
+  <div align="center">
+    <img src="IMG/1.png" />
+    <p>系统配置架构示意图</p>
+  </div>
   <br/>
   <br/>
   
@@ -73,7 +76,10 @@
   模块构建流程如图。
   
   <br/>
-  ![png2](2.png)
+  <div align="center">
+    <img src="IMG/2.png" />
+    <p>模块构建流程图</p>
+  </div>
   <br/>
   <br/>
   

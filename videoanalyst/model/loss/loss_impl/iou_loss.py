@@ -32,28 +32,34 @@ class IOULoss(ModuleBase):
         self.weight = self._hyper_params["weight"]
 
     def forward(self, pred_data, target_data):
-        pred = pred_data["box_pred"]
-        gt = target_data["box_gt"]
-        cls_gt = target_data["cls_gt"]
+        # per-pixel prediction: a location predict a box
+        pred = pred_data["box_pred"]  # (B,HW,4)
+        gt = target_data["box_gt"]  # (B,HW,4)
+        cls_gt = target_data["cls_gt"]  # (B,HW,1)
         mask = ((~(cls_gt == self.background)) *
                 (~(cls_gt == self.ignore_label))).detach()
-        mask = mask.type(torch.Tensor).squeeze(2).to(pred.device)
-
+        mask = mask.type(torch.Tensor).squeeze(2).to(pred.device)  # (B,HW)
+        # if is_negative_pair, all elements of mask == 0
+        # area of ground truth|predict_box
         aog = torch.abs(gt[:, :, 2] - gt[:, :, 0] +
                         1) * torch.abs(gt[:, :, 3] - gt[:, :, 1] + 1)
         aop = torch.abs(pred[:, :, 2] - pred[:, :, 0] +
                         1) * torch.abs(pred[:, :, 3] - pred[:, :, 1] + 1)
 
+        # aog|aop shape:(B,HW)
         iw = torch.min(pred[:, :, 2], gt[:, :, 2]) - torch.max(
             pred[:, :, 0], gt[:, :, 0]) + 1
         ih = torch.min(pred[:, :, 3], gt[:, :, 3]) - torch.max(
             pred[:, :, 1], gt[:, :, 1]) + 1
         inter = torch.max(iw, self.t_zero) * torch.max(ih, self.t_zero)
 
+        # iou shape:(B,HW)
         union = aog + aop - inter
         iou = torch.max(inter / union, self.t_zero)
         loss = -self.safelog(iou)
 
+        # only add positive samples' losses and iou
+        # if is_negative_pair, no loss
         loss = (loss * mask).sum() / torch.max(
             mask.sum(), self.t_one) * self._hyper_params["weight"]
         iou = iou.detach()

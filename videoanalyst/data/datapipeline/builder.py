@@ -13,6 +13,7 @@ from ..transformer.builder import build as build_transformer
 from .datapipeline_base import TASK_DATAPIPELINES, DatapipelineBase
 
 
+# datapipeline主要由下面三部分构成 sampler transformers target
 def build(task: str, cfg: CfgNode, seed: int = 0) -> DatapipelineBase:
     r"""
     Arguments
@@ -27,9 +28,13 @@ def build(task: str, cfg: CfgNode, seed: int = 0) -> DatapipelineBase:
     assert task in TASK_DATAPIPELINES, "invalid task name"
     MODULES = TASK_DATAPIPELINES[task]
 
-    sampler = build_sampler(task, cfg.sampler, seed=seed)
-    transformers = build_transformer(task, cfg.transformer, seed=seed)
-    target = build_target(task, cfg.target)
+    sampler = build_sampler(
+        task, cfg.sampler,
+        seed=seed)  # 从同一个序列中产生一个positive pair或者是从不同序列中产生一个negative pair
+    transformers = build_transformer(
+        task, cfg.transformer, seed=seed
+    )  # 数据增广，主要有scale和shift，使search patch和templete patch并不是正好目标中心对着的，会有一点偏移
+    target = build_target(task, cfg.target)  # 构造label
 
     pipeline = []
     pipeline.extend(transformers)
@@ -48,7 +53,7 @@ def build(task: str, cfg: CfgNode, seed: int = 0) -> DatapipelineBase:
 
 
 def get_config(task_list: List) -> Dict[str, CfgNode]:
-    cfg_dict = {name: CfgNode() for name in task_list}
+    cfg_dict: dict = {name: CfgNode() for name in task_list}
 
     for cfg_name, modules in TASK_DATAPIPELINES.items():
         cfg = cfg_dict[cfg_name]

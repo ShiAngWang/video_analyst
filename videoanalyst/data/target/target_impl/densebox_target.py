@@ -57,14 +57,14 @@ class DenseboxTarget(TargetBase):
             cls_label[cls_label == 1] = 0
 
         training_data = dict(
-            im_z=im_z,
-            im_x=im_x,
-            bbox_z=bbox_z,
-            bbox_x=bbox_x,
-            cls_gt=cls_label,
-            ctr_gt=ctr_label,
-            box_gt=box_label,
-            is_negative_pair=int(is_negative_pair),
+            im_z=im_z,  # 经过crop和resize之后的template patch
+            im_x=im_x,  # 经过crop和resize之后的search patch
+            bbox_z=bbox_z,  # 坐标相对于im_z的template gt_bbox
+            bbox_x=bbox_x,  # 坐标相对于im_x的search gt_bbox
+            cls_gt=cls_label,  # (h*w ,1)的cls label
+            ctr_gt=ctr_label,  # (h*w ,1)的ctr label
+            box_gt=box_label,  # (h*w ,4)的reg label
+            is_negative_pair=int(is_negative_pair),  # 标志位
         )
         #training_data = super().__call__(training_data)
 

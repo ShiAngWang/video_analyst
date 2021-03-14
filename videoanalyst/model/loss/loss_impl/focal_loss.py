@@ -46,17 +46,20 @@ class FocalLoss(ModuleBase):
             scalar loss
             format: (,)
         """
-        pred = pred_data["cls_pred"]
-        label = target_data["cls_gt"]
+        pred = pred_data["cls_pred"]  # (B,HW,1)
+        label = target_data["cls_gt"]  # (B,HW,1）
         mask = ~(label == self._hyper_params["ignore_label"])
         mask = mask.type(torch.Tensor).to(label.device)
-        vlabel = label * mask
-        zero_mat = torch.zeros(pred.shape[0], pred.shape[1], pred.shape[2] + 1)
+        vlabel = label * mask  # if is_negative_pair, vlabel == 0
+        zero_mat = torch.zeros(pred.shape[0], pred.shape[1],
+                               pred.shape[2] + 1)  # (B,HW,2)
 
-        one_mat = torch.ones(pred.shape[0], pred.shape[1], pred.shape[2] + 1)
+        one_mat = torch.ones(pred.shape[0], pred.shape[1],
+                             pred.shape[2] + 1)  # (B,HW,2)
         index_mat = vlabel.type(torch.LongTensor)
-        onehot_ = zero_mat.scatter(2, index_mat, one_mat)
-        onehot = onehot_[:, :, 1:].type(torch.Tensor).to(pred.device)
+        onehot_ = zero_mat.scatter(2, index_mat, one_mat)  # broadcast
+        onehot = onehot_[:, :, 1:].type(torch.Tensor).to(
+            pred.device)  # (B,HW,1)
         loss = sigmoid_focal_loss_jit(pred, onehot, self._hyper_params["alpha"],
                                       self._hyper_params["gamma"], "none")
         positive_mask = (label > 0).type(torch.Tensor).to(pred.device)
